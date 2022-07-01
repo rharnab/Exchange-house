@@ -1,0 +1,1 @@
+full_name like '% BIN %' or full_name like '% ABDUL %'or full_name like '% HIR %'or full_name like '%  %'or full_name like '%  %'or full_name like '%  %'or full_name like '%  %'or full_name like '% ZULKIFLI %'

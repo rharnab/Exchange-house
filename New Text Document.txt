@@ -1,0 +1,320 @@
+@extends('layouts.admin')
+@section('title') Create new account @endsection
+@section('a_info')has-treeview menu-open @endsection
+@section('a_info_a') active @endsection
+@section('a_add') active @endsection
+
+@section('main-content')
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Account Registration</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Account list</a></li>
+                            <li class="breadcrumb-item active">Account registration</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        @if(Session::get('message'))
+            <script>alert('{{ Session::get('message') }}')</script>
+        @endif
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title">Search customer</h3>
+                            </div>
+
+                            <form method="POST" action="{{ route('admin.customer_search_for_account') }}">
+                                @csrf
+                                <div class="row p-4">
+                                    <div class="col-7">
+                                        <div class="input-group input-group-md">
+                                            <input type="text" class="form-control" name="search" value="{{ $search }}" placeholder="Enter customer phone or identification number" required />
+                                            <span class="input-group-append">
+                                                <button type="submit" class="btn btn-info btn-flat">Search</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <form method="POST" enctype="multipart/form-data" action="{{ route('admin.account_store') }}">
+                            @csrf
+                            <input type="hidden" name="cus_id" value="{{ $customer->id }}">
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title font-weight-bold">Customer Information</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th width="25%">Customer name</th>
+                                                    <td width="25%">{{ $customer->name }}</td>
+                                                    <th width="25%">Customer type</th>
+                                                    <td width="25%">{{ $customer->customer_type }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="25%">Date of birth</th>
+                                                    <td width="25%">{{ $customer->dob }}</td>
+                                                    <th width="25%">Place of birth</th>
+                                                    <td width="25%">{{ $customer->place_of_birth }}</td>
+                                                </tr>
+                                            </table>
+                                            <table  class="table table-bordered">
+                                                <tr>
+                                                    <th>Customer gender</th>
+                                                    <td>{{ $customer->gender }}</td>
+                                                    <th>Marital status</th>
+                                                    <td>{{ $customer->marital_status }}</td>
+                                                    <th>Customer occupation</th>
+                                                    <td>{{ $customer->occupation->name }}</td>
+                                                </tr>
+                                            </table>
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th width="25%">Father name</th>
+                                                    <td width="25%">{{ $customer->father_name }}</td>
+                                                    <th width="25%">Mother name</th>
+                                                    <td width="25%">{{ $customer->mother_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="25%">Present address</th>
+                                                    <td width="25%">{{ $customer->present_address }}</td>
+                                                    <th width="25%">Permanent address</th>
+                                                    <td width="25%">{{ $customer->permanent_address }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="25%">Customer Id type</th>
+                                                    <td width="25%">{{ $customer->identification->name }}</td>
+                                                    <th width="25%">Id number</th>
+                                                    <td width="25%">{{ $customer->id_number }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="25%">Phone number</th>
+                                                    <td width="25%">{{ $customer->contact_number }}</td>
+                                                    <th width="25%">Email address</th>
+                                                    <td width="25%">{{ $customer->email }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="25%">Customer country</th>
+                                                    <td width="25%">{{ $customer->country->name }}</td>
+                                                    <th width="25%">Customer city</th>
+                                                    <td width="25%">{{ $customer->city->name }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Customer signature</label>
+                                                <input type="file" name="signature_image" class="form-control" placeholder="Customer signature" required />
+                                                @error('signature_image')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title font-weight-bold">Nominee Information</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nominee name</label>
+                                                <input type="text" name="nominee_name" class="form-control" placeholder="Enter nominee name" required />
+                                                @error('nominee_name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nominee NID number </label>
+                                                <input type="text" name="nominee_nid_number" class="form-control" placeholder="Enter NID number" required />
+                                                @error('nominee_nid_number')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Relation with nominee </label>
+                                                <input type="text" name="relation_with_nominee" class="form-control" placeholder="Enter customer relation with nominee" required />
+                                                @error('relation_with_nominee')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Nominee date of birth</label>
+                                                <input type="date" name="nominee_dob" class="form-control" placeholder="Enter nominee date of birth" required />
+                                                @error('nominee_dob')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Nominee contact no</label>
+                                                <input type="text" name="nominee_contact_no" class="form-control" placeholder="Enter nominee contact number" required />
+                                                @error('nominee_contact_no')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nominee father name</label>
+                                                <input type="text" name="nominee_father_name" class="form-control" placeholder="Enter nominee father name" required />
+                                                @error('nominee_father_name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label> Nominee mother name</label>
+                                                <input type="text" name="nominee_mother_name" class="form-control" placeholder="Enter nominee mother name" required />
+                                                @error('nominee_mother_name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Nominee address </label>
+                                                <textarea name="nominee_address" class="form-control" rows="3" placeholder="Enter nominee address"></textarea>
+                                                @error('nominee_address')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title font-weight-bold">Transaction Profile</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Account type</label>
+                                                <select name="account_type_id" class="form-control select2bs4" style="width: 100%;" required >
+                                                    <option label="Select">--Select--</option>
+                                                    @foreach($account_types as $account_type)
+                                                        <option value="{{ $account_type->id }}">{{ $account_type->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('account_type_id')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Interest rate</label>
+                                                <select name="interest_rate" class="form-control select2bs4" style="width: 100%;" required >
+                                                    <option label="Select">--Select--</option>
+                                                </select>
+                                                @error('interest_rate')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Probably monthly income</label>
+                                                <input name="probably_monthly_income" type="text" class="form-control" placeholder="Enter probably monthly income" required />
+                                                @error('probably_monthly_income')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Probably monthly transaction</label>
+                                                <input type="text" name="probably_monthly_transaction" class="form-control" placeholder="Enter probably monthly transaction" required />
+                                                @error('probably_monthly_transaction')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Create Account</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+@endsection
+
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('select[name="account_type_id"]').on('change', function(){
+                var id = $(this).val();
+                if(id) {
+                    $.ajax({
+                        url: "{{  url('/admin/get-rate') }}/"+id,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data) {
+                            var d =$('select[name="interest_rate"]').empty();
+                            $.each(data, function(key, value)
+                            {
+                                $('select[name="interest_rate"]').append('<option value="'+ value.id +'">' + value.interest_rate + '</option>');
+                            });
+                        },
+                    });
+                } else
+                {
+                    alert('danger');
+                }
+            });
+        });
+    </script>
+@endpush
+
